@@ -26,6 +26,8 @@ import java.util.Properties;
 public class GuiceModule extends AbstractModule {
 
     public static final String PROPERTIES_FILE = "/app.properties";
+    public static final int DEFAULT_POOL_SIZE = 50;
+    public static final int DEFAULT_CONN_TIMEOUT = 1500;
 
     @Override
     protected void configure() {
@@ -47,14 +49,18 @@ public class GuiceModule extends AbstractModule {
     private DataSource get(@Named("datasource.url") String url,
                            @Named("datasource.username") String username,
                            @Named("datasource.password") String password,
-                           @Named("datasource.poolSize") Integer poolSize) {
+                           @Named("datasource.poolSize") Integer poolSize,
+                           @Named("datasource.connTimeout") Long connTimeout
+                           ) {
         HikariConfig config = new HikariConfig();
 
         config.setJdbcUrl(url);
         config.setDriverClassName("org.h2.Driver");
         config.setUsername(username);
         config.setPassword(password);
-        config.addDataSourceProperty( "maximumPoolSize" ,  poolSize);
+        config.setMinimumIdle(10);
+        config.setMaximumPoolSize(poolSize);
+        config.setConnectionTimeout(connTimeout);
         return new HikariDataSource( config );
     }
 
@@ -65,6 +71,8 @@ public class GuiceModule extends AbstractModule {
 
     private Properties properties() {
         Properties properties = new Properties();
+        setDefaults(properties);
+
         try {
             properties.load(getClass().getResourceAsStream(PROPERTIES_FILE));
         } catch (IOException e) {
@@ -72,6 +80,11 @@ public class GuiceModule extends AbstractModule {
         }
 
         return properties;
+    }
+
+    private void setDefaults(Properties properties) {
+        properties.setProperty("datasource.poolSize", String.valueOf(DEFAULT_POOL_SIZE));
+        properties.setProperty("datasource.connTimeout", String.valueOf(DEFAULT_CONN_TIMEOUT));
     }
 
 }
