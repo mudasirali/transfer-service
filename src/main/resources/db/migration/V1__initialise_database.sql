@@ -7,12 +7,12 @@ CREATE TABLE transactions.transfers (
   sender_id BIGINT NOT NULL,
   receiver_id BIGINT NOT NULL,
   amount BIGINT NOT NULL,
-  status TINYINT NOT NULL,
+  status INT NOT NULL,
   created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
-CREATE TABLE transactions.customers (
+CREATE TABLE transactions.accounts (
   id BIGINT PRIMARY KEY auto_increment,
   title VARCHAR(100) NOT NULL ,
   branch_id INT NOT NULL,
@@ -23,6 +23,6 @@ CREATE TABLE transactions.customers (
 
 
 CREATE INDEX created_on_idx ON transactions.transfers(created_on);
-CREATE INDEX acc_idx ON transactions.customers(branch_id, account_number);
-CREATE UNIQUE INDEX uq_customers
-  ON transactions.customers(branch_id, account_number);
+CREATE INDEX acc_idx ON transactions.accounts(branch_id, account_number);
+CREATE UNIQUE INDEX uq_accounts
+  ON transactions.accounts(branch_id, account_number);

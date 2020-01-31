@@ -2,11 +2,13 @@ package com.revolut.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.revolut.dto.*;
+import com.revolut.dto.LocalTransferRequest;
+import com.revolut.dto.TransferDTO;
+import com.revolut.dto.TransferResponse;
+import com.revolut.dto.TransferSearchRequest;
 import com.revolut.repository.TransferRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Singleton
 public class TransferService {
