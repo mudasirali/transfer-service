@@ -1,6 +1,7 @@
 package com.revolut.api.validators;
 
 import com.google.inject.Provider;
+import com.revolut.dto.LocalTransferRequest;
 import com.revolut.dto.TransferSearchRequest;
 
 import java.util.HashMap;
@@ -18,6 +19,10 @@ public class ValidatorsProvider implements Provider<Map<Class, List<Validator>>>
             put(TransferSearchRequest.class,
                     newArrayList(
                             ValidatorFactory.getSearchRequestValidator()));
+
+            put(LocalTransferRequest.class,
+                    newArrayList(
+                            ValidatorFactory.getLocalTransferRequestValidator()));
 
         }};
     }
