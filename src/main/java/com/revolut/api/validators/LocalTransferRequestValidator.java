@@ -6,13 +6,13 @@ import com.revolut.error.InvalidRequestException;
 
 public class LocalTransferRequestValidator implements Validator<LocalTransferRequest> {
 
-    public static final String TRANSFER_MISSING = "transfer.missing";
-    public static final String TRANSFER_SENDER_BRANCH_MISSING = "transfer.senderBranch.missing";
-    public static final String TRANSFER_SENDER_ACCOUNT_MISSING = "transfer.senderAccount.missing";
-    public static final String TRANSFER_RECEIVER_BRANCH_MISSING = "transfer.receiverBranch.missing";
-    public static final String TRANSFER_RECEIVER_ACCOUNT_MISSING = "transfer.receiverAccount.missing";
-    public static final String TRANSFER_AMOUNT_MISSING = "transfer.amount.missing";
-    public static final String TRANSFER_AMOUNT_INVALID = "transfer.amount.invalid";
+    public static final String TRANSFER_MISSING = "transfer.input.missing";
+    public static final String TRANSFER_SENDER_BRANCH_MISSING = "transfer.input.senderBranch.missing";
+    public static final String TRANSFER_SENDER_ACCOUNT_MISSING = "transfer.input.senderAccount.missing";
+    public static final String TRANSFER_RECEIVER_BRANCH_MISSING = "transfer.input.receiverBranch.missing";
+    public static final String TRANSFER_RECEIVER_ACCOUNT_MISSING = "transfer.input.receiverAccount.missing";
+    public static final String TRANSFER_AMOUNT_MISSING = "transfer.input.amount.missing";
+    public static final String TRANSFER_AMOUNT_INVALID = "transfer.input.amount.invalid";
 
     protected LocalTransferRequestValidator() {
 

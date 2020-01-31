@@ -21,7 +21,22 @@ public class Application {
         Injector injector = Guice.createInjector(new GuiceModule());
         TransferController transferController = injector.getInstance(TransferController.class);
         Gson gson = injector.getInstance(Gson.class);
+
         routing(transferController, gson::toJson);
+
+        exception(TransferException.class, (e, req, res) -> {
+            res.status(e.getHttpStatus());
+            res.type(API_RESPONSE_TYPE);
+            JsonObject errorDto = new JsonObject();
+            errorDto.addProperty("message", e.getMessage());
+            errorDto.addProperty("code", e.getCode());
+            res.body(errorDto.toString());
+        });
+
+
+        after((request, response) -> {
+            response.type(API_RESPONSE_TYPE);
+        });
     }
 
     public static void routing(TransferController transferController, ResponseTransformer transformer) {
@@ -32,18 +47,7 @@ public class Application {
         get("/transfer/:transferId", transferController::getTransfer, transformer);
 
 
-        exception(TransferException.class, (e, req, res) -> {
-            res.status(e.getHttpStatus());
-            res.type(API_RESPONSE_TYPE);
-            JsonObject errorDto = new JsonObject();
-            errorDto.addProperty("message", e.getMessage());
-            res.body(errorDto.toString());
-        });
 
-
-        after((request, response) -> {
-            response.type(API_RESPONSE_TYPE);
-        });
     }
 
 

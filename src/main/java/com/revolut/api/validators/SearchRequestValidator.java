@@ -5,9 +5,9 @@ import com.revolut.error.InvalidRequestException;
 
 public class SearchRequestValidator implements Validator<TransferSearchRequest> {
 
-    public static final String SEARCH_MISSING = "search.missing";
-    public static final String SEARCH_END_MISSING = "search.end.missing";
-    public static final String SEARCH_START_MISSING = "search.start.missing";
+    public static final String SEARCH_MISSING = "search.input.missing";
+    public static final String SEARCH_END_MISSING = "search.input.end.missing";
+    public static final String SEARCH_START_MISSING = "search.input.start.missing";
 
     protected SearchRequestValidator() {
 

@@ -8,6 +8,10 @@ import java.util.Arrays;
 public abstract class TransferException extends RuntimeException {
 
     private int httpStatus;
+
+    /**
+     * used for translation
+     */
     private String code;
 
     public TransferException(String code, int httpStatus, Throwable throwable, String message) {
