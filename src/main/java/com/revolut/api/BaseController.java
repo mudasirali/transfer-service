@@ -3,18 +3,20 @@ package com.revolut.api;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.inject.Inject;
-import com.revolut.api.validators.Validator;
-import com.revolut.error.InvalidRequestException;
+import com.revolut.api.validator.Validator;
 import spark.utils.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.revolut.error.TransferExceptionFactory.getInvalidRequestException;
 import static java.util.Collections.EMPTY_LIST;
 
 public class BaseController {
 
 
+    public static final String TRANSFER_ID_MISSING = "transfer.id.missing";
+    public static final String TRANSFER_ID_INVALID = "transfer.id.invalid";
     @Inject
     private Gson gson;
 
@@ -34,7 +36,7 @@ public class BaseController {
 
             return value;
         } catch (JsonSyntaxException e) {
-            throw new InvalidRequestException(e, null, e.getMessage());
+            throw getInvalidRequestException(e);
         }
     }
 
@@ -42,15 +44,14 @@ public class BaseController {
     final Long id(String id) {
 
         if (StringUtils.isBlank(id)) {
-            throw new InvalidRequestException(null, String.format("Invalid request id: %s", id));
+            throw getInvalidRequestException(TRANSFER_ID_MISSING, String.format("Invalid request id: %s", id));
         }
 
         try {
             return Long.parseLong(id);
         } catch (IllegalArgumentException e) {
-            throw new InvalidRequestException(e, null, String.format("Invalid request id: %s", id));
+            throw getInvalidRequestException(TRANSFER_ID_INVALID, String.format("Invalid request id: %s", id), e);
         }
     }
-
 
 }

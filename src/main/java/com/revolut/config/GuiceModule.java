@@ -2,13 +2,11 @@ package com.revolut.config;
 
 import com.google.gson.*;
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.revolut.api.validators.Validator;
-import com.revolut.api.validators.ValidatorsProvider;
+import com.revolut.api.validator.Validator;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;

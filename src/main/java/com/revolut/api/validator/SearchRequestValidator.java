@@ -1,7 +1,9 @@
-package com.revolut.api.validators;
+package com.revolut.api.validator;
 
 import com.revolut.dto.TransferSearchRequest;
 import com.revolut.error.InvalidRequestException;
+
+import static com.revolut.error.TransferExceptionFactory.getInvalidRequestException;
 
 public class SearchRequestValidator implements Validator<TransferSearchRequest> {
 
@@ -16,15 +18,15 @@ public class SearchRequestValidator implements Validator<TransferSearchRequest> 
     @Override
     public void validate(TransferSearchRequest request) throws InvalidRequestException {
         if (request == null) {
-            throw new InvalidRequestException(SEARCH_MISSING, "Search request can not be null");
+            throw getInvalidRequestException(SEARCH_MISSING, "Search request can not be null");
         }
 
         if (request.getEnd() == null) {
-            throw new InvalidRequestException(SEARCH_END_MISSING, "End date can not be null");
+            throw getInvalidRequestException(SEARCH_END_MISSING, "End date can not be null");
         }
 
         if (request.getStart() == null) {
-            throw new InvalidRequestException(SEARCH_START_MISSING, "End date can not be null");
+            throw getInvalidRequestException(SEARCH_START_MISSING, "End date can not be null");
         }
     }
 

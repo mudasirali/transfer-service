@@ -5,11 +5,11 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 public class TransferNotFoundException extends TransferException {
 
 
-    public TransferNotFoundException(Throwable throwable, String code, String message) {
+    protected TransferNotFoundException(Throwable throwable, String code, String message) {
         super(code, HTTP_NOT_FOUND, throwable, message);
     }
 
-    public TransferNotFoundException(String code, String message) {
+    protected TransferNotFoundException(String code, String message) {
         super(code, HTTP_NOT_FOUND, null, message);
     }
 }

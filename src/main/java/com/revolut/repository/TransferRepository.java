@@ -6,12 +6,12 @@ import com.revolut.domain.tables.Accounts;
 import com.revolut.domain.tables.Transfers;
 import com.revolut.domain.tables.records.AccountsRecord;
 import com.revolut.dto.*;
-import com.revolut.error.AccountNotFoundException;
-import com.revolut.error.InsufficientFundsException;
-import com.revolut.error.TransferNotFoundException;
+import com.revolut.error.TooMuchAccountActivityException;
+import com.revolut.error.TransferExceptionFactory;
 import com.revolut.util.RetryUtil;
 import org.jooq.*;
 import org.jooq.conf.Settings;
+import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 
@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.revolut.domain.Tables.ACCOUNTS;
 import static com.revolut.domain.Tables.TRANSFERS;
+import static com.revolut.error.TransferExceptionFactory.*;
 import static org.jooq.impl.DSL.concat;
 
 
@@ -51,7 +52,7 @@ public class TransferRepository {
         return selectTransfers(transfer, sender, receiver)
                 .where(transfer.ID.eq(id))
                 .fetchOptional().map(transferDTOMapper::map)
-                .orElseThrow( () -> new TransferNotFoundException(TRANSFER_MISSING, String.format("Transfer %s not found", id)));
+                .orElseThrow( () -> getTransferNotFoundException(TRANSFER_MISSING, String.format("Transfer %s not found", id)));
 
     }
 
@@ -74,7 +75,9 @@ public class TransferRepository {
         log.debug("Executing local transfer: {}", localTransferRequest);
 
         Long transferId = RetryUtil.<LocalTransferRequest, Long>defaultExecutor()
-                .retryOn(Throwable.class)
+                .retryOn(DataAccessException.class)
+                .backOfferiod(500)
+                .wrapErrorWith(TransferExceptionFactory::getTooMuchAccountActivityException)
                 .execute(() -> makeTransfer(localTransferRequest));
 
         log.debug("Saved transfer: {}", transferId);
@@ -107,10 +110,9 @@ public class TransferRepository {
                                     localTransferRequest.getSenderAccountNumber()));
 
                     if (sender.getAccountBalance() < localTransferRequest.getAmount()) {
-                        throw new InsufficientFundsException("sender.funds.insufficient",
-                                String.format("Account %s%s has insufficient funds",
-                                        localTransferRequest.getSenderBranchCode(),
-                                        localTransferRequest.getSenderAccountNumber()));
+                        throw getInsufficientFundsException("sender.funds.insufficient", String.format("Account %s%s has insufficient funds",
+                                localTransferRequest.getSenderBranchCode(),
+                                localTransferRequest.getSenderAccountNumber()));
                     }
 
                     sender.setAccountBalance(sender.getAccountBalance() - localTransferRequest.getAmount());
@@ -132,8 +134,6 @@ public class TransferRepository {
                             .returning(TRANSFERS.ID)
                             .fetchOne().getValue(TRANSFERS.ID);
 
-                    Thread.sleep(700);
-
                     return id;
                 });
 
@@ -141,11 +141,6 @@ public class TransferRepository {
         return transferId;
     }
 
-    private AccountNotFoundException accountNotFoundException(String code, int branchCode, long accountNumber) {
-        return new AccountNotFoundException(code, String.format("Account %s%s not found",
-                branchCode,
-                accountNumber));
-    }
 
     private SelectOnConditionStep<Record7<Long, Long, Integer, LocalDateTime, String, String, String>> selectTransfers(Transfers transfer, Accounts sender, Accounts receiver) {
 
