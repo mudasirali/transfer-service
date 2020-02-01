@@ -12,20 +12,20 @@ import java.time.LocalDateTime;
 public class TransferDTO {
 
     private Long id;
-    private long amount;
+    private Long amount;
     private TransactionStatus status;
     private LocalDateTime createdOn;
     private String senderAccount;
-    private String receiverAccount;
-    private String receiverName;
+    private String recipientAccount;
+    private String recipientName;
 
-    public TransferDTO(Long id, long amount, TransactionStatus status, LocalDateTime createdOn, String senderAccount, String receiverAccount, String receiverName) {
+    public TransferDTO(Long id, Long amount, TransactionStatus status, LocalDateTime createdOn, String senderAccount, String recipientAccount, String recipientName) {
         this.id = id;
         this.amount = amount;
         this.status = status;
         this.createdOn = createdOn;
         this.senderAccount = senderAccount;
-        this.receiverAccount = receiverAccount;
-        this.receiverName = receiverName;
+        this.recipientAccount = recipientAccount;
+        this.recipientName = recipientName;
     }
 }

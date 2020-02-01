@@ -4,10 +4,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.revolut.dto.*;
 import com.revolut.repository.TransferRepository;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.UUID;
-
+@Slf4j
 @Singleton
 public class TransferService {
 
@@ -15,14 +14,34 @@ public class TransferService {
     private TransferRepository transferRepository;
 
     public TransferResponse makeLocalTransfer(LocalTransferRequest request) {
-        return transferRepository.createTransfer(request);
+        log.debug("creating transfer: {}", request);
+
+        TransferResponse response = transferRepository.createTransfer(request);
+
+        log.debug("transfer created: {}", response.getId());
+        log.trace("transfer created: {}", response);
+        return response;
     }
 
-    public List<TransferDTO> searchTransfers(TransferSearchRequest request) {
-        return transferRepository.searchTransfers(request);
+    public SearchTransferResponse searchTransfers(TransferSearchRequest request) {
+        log.debug("searching transfers: {}", request);
+
+        SearchTransferResponse transfers = transferRepository.searchTransfers(request);
+
+        log.debug("transfers returnedd: {}", transfers.getTransfers().size());
+        log.trace("transfers returned: {}", transfers);
+        return transfers;
     }
 
     public TransferDTO getTransfer(Long id) {
-        return transferRepository.getTransfer(id);
+        log.debug("getting transfer: {}", id);
+
+        TransferDTO transfer = transferRepository.getTransfer(id);
+
+        log.debug("returning transfer: {}", transfer.getId());
+        log.trace("returning transfer: {}", transfer);
+        return transfer;
+
+
     }
 }

@@ -1,4 +1,4 @@
-package com.revolut.api.validators;
+package com.revolut.api.validator;
 
 import com.revolut.error.InvalidRequestException;
 
