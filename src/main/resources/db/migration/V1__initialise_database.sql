@@ -5,7 +5,7 @@ CREATE SCHEMA transactions;
 CREATE TABLE transactions.transfers (
   id BIGINT PRIMARY KEY auto_increment,
   sender_id BIGINT NOT NULL,
-  receiver_id BIGINT NOT NULL,
+  recipient_id BIGINT NOT NULL,
   amount BIGINT NOT NULL,
   status INT NOT NULL,
   created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP

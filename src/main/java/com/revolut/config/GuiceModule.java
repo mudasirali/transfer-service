@@ -48,12 +48,12 @@ public class GuiceModule extends AbstractModule {
                            @Named("datasource.username") String username,
                            @Named("datasource.password") String password,
                            @Named("datasource.poolSize") Integer poolSize,
-                           @Named("datasource.connTimeout") Long connTimeout
-                           ) {
+                           @Named("datasource.connTimeout") Long connTimeout,
+                           @Named("datasource.driver") String driver) {
         HikariConfig config = new HikariConfig();
 
         config.setJdbcUrl(url);
-        config.setDriverClassName("org.h2.Driver");
+        config.setDriverClassName(driver);
         config.setUsername(username);
         config.setPassword(password);
         config.setMinimumIdle(10);

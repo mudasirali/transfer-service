@@ -7,13 +7,14 @@ import static com.revolut.error.TransferExceptionFactory.getInvalidRequestExcept
 
 public class LocalTransferRequestValidator implements Validator<LocalTransferRequest> {
 
-    private static final String TRANSFER_MISSING = "transfer.input.missing";
-    private static final String TRANSFER_SENDER_BRANCH_MISSING = "transfer.input.senderBranch.missing";
-    private static final String TRANSFER_SENDER_ACCOUNT_MISSING = "transfer.input.senderAccount.missing";
-    private static final String TRANSFER_RECEIVER_BRANCH_MISSING = "transfer.input.receiverBranch.missing";
-    private static final String TRANSFER_RECEIVER_ACCOUNT_MISSING = "transfer.input.receiverAccount.missing";
-    private static final String TRANSFER_AMOUNT_MISSING = "transfer.input.amount.missing";
-    private static final String TRANSFER_AMOUNT_INVALID = "transfer.input.amount.invalid";
+    public static final String TRANSFER_MISSING = "transfer.input.missing";
+    public static final String TRANSFER_SENDER_BRANCH_MISSING = "transfer.input.senderBranch.missing";
+    public static final String TRANSFER_SENDER_ACCOUNT_MISSING = "transfer.input.senderAccount.missing";
+    public static final String TRANSFER_RECIPIENT_BRANCH_MISSING = "transfer.input.recipientBranch.missing";
+    public static final String TRANSFER_RECIPIENT_ACCOUNT_MISSING = "transfer.input.recipientAccount.missing";
+    public static final String TRANSFER_AMOUNT_MISSING = "transfer.input.amount.missing";
+    public static final String TRANSFER_AMOUNT_INVALID = "transfer.input.amount.invalid";
+    public static final String SAME_ACCOUNT = "transfer.input.sameAccount";
 
     protected LocalTransferRequestValidator() {
 
@@ -34,12 +35,12 @@ public class LocalTransferRequestValidator implements Validator<LocalTransferReq
             throw getInvalidRequestException(TRANSFER_SENDER_ACCOUNT_MISSING, "Sender account can not be null");
         }
 
-        if (request.getReceiverBranchCode() == null) {
-            throw getInvalidRequestException(TRANSFER_RECEIVER_BRANCH_MISSING, "Receiver branch can not be null");
+        if (request.getRecipientBranchCode() == null) {
+            throw getInvalidRequestException(TRANSFER_RECIPIENT_BRANCH_MISSING, "Recipient branch can not be null");
         }
 
-        if (request.getReceiverAccountNumber() == null) {
-            throw getInvalidRequestException(TRANSFER_RECEIVER_ACCOUNT_MISSING, "Receiver account can not be null");
+        if (request.getRecipientAccountNumber() == null) {
+            throw getInvalidRequestException(TRANSFER_RECIPIENT_ACCOUNT_MISSING, "Recipient account can not be null");
         }
 
         if (request.getAmount() == null) {
@@ -50,9 +51,9 @@ public class LocalTransferRequestValidator implements Validator<LocalTransferReq
             throw getInvalidRequestException(TRANSFER_AMOUNT_INVALID, "Amount can not be below zero");
         }
 
-        if (request.getReceiverBranchCode() == request.getSenderBranchCode() &&
-            request.getReceiverAccountNumber() == request.getSenderAccountNumber()) {
-            throw getInvalidRequestException("transfer.input.sameAccount", "Sender and receiver accounts can not be same");
+        if (request.getRecipientBranchCode().equals(request.getSenderBranchCode()) &&
+            request.getRecipientAccountNumber().equals(request.getSenderAccountNumber())) {
+            throw getInvalidRequestException(SAME_ACCOUNT, "Sender and recipient accounts can not be same");
         }
     }
 

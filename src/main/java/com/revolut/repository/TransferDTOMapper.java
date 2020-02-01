@@ -15,8 +15,8 @@ public class TransferDTOMapper implements RecordMapper<Record, TransferDTO> {
                 .id(record.getValue(TRANSFERS.ID))
                 .amount(record.getValue(TRANSFERS.AMOUNT))
                 .createdOn(record.getValue(TRANSFERS.CREATED_ON))
-                .receiverName(record.getValue("receiverName").toString())
-                .receiverAccount(record.getValue("receiverAccount").toString())
+                .recipientName(record.getValue("recipientName").toString())
+                .recipientAccount(record.getValue("recipientAccount").toString())
                 .senderAccount(record.getValue("senderAccount").toString())
                 .status(TransactionStatus.fromCode(record.getValue(TRANSFERS.STATUS).intValue()))
                 .build();

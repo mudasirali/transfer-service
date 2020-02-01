@@ -2,14 +2,9 @@ package com.revolut.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.revolut.dto.LocalTransferRequest;
-import com.revolut.dto.TransferDTO;
-import com.revolut.dto.TransferResponse;
-import com.revolut.dto.TransferSearchRequest;
+import com.revolut.dto.*;
 import com.revolut.repository.TransferRepository;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 @Slf4j
 @Singleton
@@ -28,12 +23,12 @@ public class TransferService {
         return response;
     }
 
-    public List<TransferDTO> searchTransfers(TransferSearchRequest request) {
+    public SearchTransferResponse searchTransfers(TransferSearchRequest request) {
         log.debug("searching transfers: {}", request);
 
-        List<TransferDTO> transfers = transferRepository.searchTransfers(request);
+        SearchTransferResponse transfers = transferRepository.searchTransfers(request);
 
-        log.debug("transfers returnedd: {}", transfers.size());
+        log.debug("transfers returnedd: {}", transfers.getTransfers().size());
         log.trace("transfers returned: {}", transfers);
         return transfers;
     }

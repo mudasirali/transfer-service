@@ -1,15 +1,10 @@
 package com.revolut.api;
 
 import com.google.inject.Inject;
-import com.revolut.dto.LocalTransferRequest;
-import com.revolut.dto.TransferDTO;
-import com.revolut.dto.TransferResponse;
-import com.revolut.dto.TransferSearchRequest;
+import com.revolut.dto.*;
 import com.revolut.service.TransferService;
 import spark.Request;
 import spark.Response;
-
-import java.util.List;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
 
@@ -32,10 +27,10 @@ public class TransferController extends BaseController {
         return transferResponse;
     }
 
-    public List<TransferDTO> searchTransfers(Request req, Response res) {
+    public SearchTransferResponse searchTransfers(Request req, Response res) {
         TransferSearchRequest request = buildRequest(req.body(), TransferSearchRequest.class);
 
-        List<TransferDTO> searchResult = transferService.searchTransfers(request);
+        SearchTransferResponse searchResult = transferService.searchTransfers(request);
         return searchResult;
     }
 
